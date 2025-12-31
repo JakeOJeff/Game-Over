@@ -159,6 +159,9 @@ function folder:drawFront()
         lg.draw(folderFrontImg, self.folderFront.x, self.folderFront.y, 0, scale, scale)
     elseif self.opened then
         lg.draw(folderView, 0, 0, 0, scale, scale)
+        for i = 1, #notesInFolder do
+            local note = notesInFolder[i]
+        end
     end
 end
 
