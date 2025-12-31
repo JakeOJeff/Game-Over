@@ -16,6 +16,7 @@ function Note:load()
     photoCrumpleImg = lg.newImage("assets/screens/photo-rolled.png")
     photoDefaultContentImg = lg.newImage("assets/screens/imgs/john.png")
 end
+
 function Note:new(x, y, text, type, content)
     local n = {
         x = x,
@@ -69,7 +70,7 @@ function Note:update(dt)
                 self.crumpleSound:play()
                 self.holding = true
             end
-        elseif my > self.y + self.img:getHeight() - 30 * scale and mx > self.x + self.img:getWidth() - 40 * scale and self.type == "img-note"   and holdingNote == nil  then
+        elseif my > self.y + self.img:getHeight() - 30 * scale and mx > self.x + self.img:getWidth() - 40 * scale and self.type == "img-note" and holdingNote == nil then
             if love.mouse.isDown(1) and not self.holding then
                 self.crumpleSound:play()
                 self.holding = true
@@ -110,7 +111,7 @@ function Note:draw()
         lg.setColor(41 / 255, 30 / 255, 22 / 255)
         lg.printf(self.text, self.x + 20 * scale, self.y + 80 * scale, self.img:getWidth() - 40 * scale)
     end
-    lg.setColor(1,1,1)
+    lg.setColor(1, 1, 1)
 end
 
 function Note:mousedown(x, y, button)

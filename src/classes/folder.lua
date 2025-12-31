@@ -1,4 +1,5 @@
-local folder = {}
+local folder = {
+}
 
 folderBgImg = lg.newImage("assets/screens/folder-bg.png")
 folderFrontImg = lg.newImage("assets/screens/folder-front.png")
@@ -98,10 +99,10 @@ function folder:update(dt)
         end
         -- noteDropped.x = self.folderBg.x + 20 * scale
         -- noteDropped.y = self.folderBg.y + 20 * scale                                  --+ (#notesInFolder * (noteDropped.img:getHeight() * scale + 10 * scale))
-        
+
         table.insert(notesInFolder, noteDropped)
-        droppedNote.x = self.folderBg.x + folderBgImg:getWidth()/2 - droppedNote.img:getWidth()/1.5 * scale
-        droppedNote.y = self.folderBg.y + 40 * scale    
+        droppedNote.x = self.folderBg.x + folderBgImg:getWidth() / 2 - droppedNote.img:getWidth() / 1.5 * scale
+        droppedNote.y = self.folderBg.y + 40 * scale
         if droppedNote.y > wH then
             droppedNote.knotPoints = {}
             table.remove(notes, droppedNoteId)
@@ -110,6 +111,29 @@ function folder:update(dt)
     end
 
     self.wasHovering = self.isHovering
+end
+
+function folder:mousedown(x, y, button)
+    if #notesInFolder > 1 and button == 2 and not activeKnot then
+        local note = notesInFolder[#notesInFolder]
+        table.insert(notes, note)
+
+        note.dragging = true
+
+        love.mouse.setCursor(handCursor)
+        note.dragOffsetX = x - note.x
+        note.dragOffsetY = y - note.y
+    end
+end
+
+function folder:mouserelease(x, y, button)
+    if #notesInFolder > 1 and button == 2 and not activeKnot then
+        local note = notesInFolder[#notesInFolder]
+        if note.dragging then
+            note.x = note.x - 10 * scale
+            note.y = note.y - 10 * scale
+        end
+    end
 end
 
 function folder:drawBack()

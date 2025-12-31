@@ -16,6 +16,7 @@ local enterTelButtPressed = lg.newImage("assets/screens/enter-button-normal.png"
 function TELEPHONE:load()
     buttons = {}
     telnav = nav:new(self, nil, "REALITY")
+    folder:load()
 
     self.codes = {
         {
@@ -31,6 +32,15 @@ function TELEPHONE:load()
             "I have done what you asked",
             "Is that you there?"
         }
+    }
+
+    self.subtitles = {
+        text = {},
+        index = 1,
+        delay = 2,
+        timer = 0,
+        debounce = false
+        
     }
 
     self.display = ""
@@ -70,6 +80,8 @@ end
 
 function TELEPHONE:update(dt)
     telnav:update(dt)
+        folder:update(dt)
+
     update_buttons(dt)
 end
 
@@ -87,6 +99,9 @@ function TELEPHONE:draw()
     lg.print(self.display, 690 * scale, 170 * scale)
     lg.setColor(1, 1, 1)
     telnav:draw()
+        folder:drawBack()
+    folder:drawFront()
+
 end
 
 function TELEPHONE:mousepressed(x, y, button)
@@ -100,7 +115,7 @@ end
 function TELEPHONE:checkCode(code)
     for i, v in pairs(self.codes) do
         if tostring(v.code) == code then
-            print(v.name)
+            self:call(v.name)
         end
     end
 end

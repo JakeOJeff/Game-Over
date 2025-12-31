@@ -25,10 +25,12 @@ end
 function REALITY:mousepressed(x, y, button)
     mousedown_notes(x, y, button)
     mousedown_knots(x, y, button)
+    folder:mousedown(x, y, button)
 end
 
 function REALITY:mousereleased(x, y, button)
     mouserelease_notes(button)
+    folder:mouserelease(x, y, button)
 end
 
 return REALITY
