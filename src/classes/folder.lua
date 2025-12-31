@@ -87,19 +87,25 @@ function folder:update(dt)
         end
     end
     if noteDropped then
-        noteDropped.x = self.folderBg.x + 20 * scale
-        noteDropped.y = self.folderBg.y + 20 * scale --+ (#notesInFolder * (noteDropped.img:getHeight() * scale + 10 * scale))
-        table.insert(notesInFolder, noteDropped)
+        local droppedNote = nil
+        local droppedNoteId = nil
         for i, v in ipairs(notes) do
             if v == noteDropped then
-                table.remove(notes, i)
+                droppedNote = v
+                droppedNoteId = i
                 break
             end
         end
-        if noteDropped.y > wH - 40 * scale then
-            noteDropped.knotPoints = {}
-                    noteDropped = nil
-
+        -- noteDropped.x = self.folderBg.x + 20 * scale
+        -- noteDropped.y = self.folderBg.y + 20 * scale                                  --+ (#notesInFolder * (noteDropped.img:getHeight() * scale + 10 * scale))
+        
+        table.insert(notesInFolder, noteDropped)
+        droppedNote.x = self.folderBg.x + folderBgImg:getWidth()/2 - droppedNote.img:getWidth()/1.5 * scale
+        droppedNote.y = self.folderBg.y + 40 * scale    
+        if droppedNote.y > wH then
+            droppedNote.knotPoints = {}
+            table.remove(notes, droppedNoteId)
+            noteDropped = nil
         end
     end
 
@@ -109,6 +115,7 @@ end
 function folder:drawBack()
     lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
 end
+
 function folder:drawFront()
     if not holdingNote and not noteDropped then
         lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)

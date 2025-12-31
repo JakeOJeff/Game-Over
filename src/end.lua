@@ -22,7 +22,6 @@ function END:load()
     self.timerManager = Timer:new()
 
 
-    -- 🎬 End credits text
     self.textWall = {}
     self.textWall.text = {
         "Creative Producer : JIM BROWN",

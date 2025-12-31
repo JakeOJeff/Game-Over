@@ -18,7 +18,19 @@ function TELEPHONE:load()
     telnav = nav:new(self, nil, "REALITY")
 
     self.codes = {
-        ["668231"] = "Janitor",
+        {
+            code = 668231,
+            name = "Janitor"
+        }
+    }
+
+    self.people = {
+        ["Janitor"] = {
+            "Hello?",
+            "Jack?",
+            "I have done what you asked",
+            "Is that you there?"
+        }
     }
 
     self.display = ""
@@ -52,7 +64,7 @@ function TELEPHONE:load()
     end)
     btnEnter = Button:new(694 * scale + 2 * enterTelButtNormal:getWidth() + 2 * 14 * scale, fourthY, enterTelButtNormal,
         enterTelButtPressed, ">", function()
-
+            self:checkCode(self.display)
     end)
 end
 
@@ -87,13 +99,13 @@ end
 
 function TELEPHONE:checkCode(code)
     for i, v in pairs(self.codes) do
-        if i == code then
-            
+        if tostring(v.code) == code then
+            print(v.name)
         end
     end
 end
 
 function TELEPHONE:call(name)
-    self.setScene(name)
+    
 end
 return TELEPHONE

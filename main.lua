@@ -34,9 +34,9 @@ Note:load()
 
 
 local scenery = SceneryInit(
-    { path = "src.end", key = "END" , default = "true" },
+    { path = "src.end", key = "END"  },
     { path = "src.transition", key = "TRANSITION" },
-    { path = "src.reality", key = "REALITY"},
+    { path = "src.reality", key = "REALITY", default = "true"},
     { path = "src.telephone", key = "TELEPHONE" }
 )
 -- NOTES
@@ -45,7 +45,7 @@ note = Note:new(40, 40,
 note2 = Note:new(552, 250,
     "A body was found in the library. The Victim was stabbed multiple times with a letter opener.")
 note3 = Note:new(302, 60, "Library is next to the Study")
-note4 = Note:new(860, 350, "Someone was working on something late at night \n - Jimmy, The Janitor")
+note4 = Note:new(860, 350, "Someone was working on something late at night \n - Jack, The Janitor")
 note5 = Note:new(800, 150, "", "img-note")
 
 beginNoteKnot(note)
