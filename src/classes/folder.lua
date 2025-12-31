@@ -102,7 +102,17 @@ function folder:update(dt)
         -- noteDropped.x = self.folderBg.x + 20 * scale
         -- noteDropped.y = self.folderBg.y + 20 * scale                                  --+ (#notesInFolder * (noteDropped.img:getHeight() * scale + 10 * scale))
 
-        table.insert(notesInFolder, noteDropped)
+        local foundNote = nil
+        for i, v in ipairs(notesInFolder) do -- ipairs for array-like parts, pairs for all key-value pairs
+            if v == noteDropped then
+                foundNote = i
+                break -- Stop iterating once found
+            end
+        end
+
+        if foundNote == nil then
+            table.insert(notesInFolder, noteDropped)
+        end
         droppedNote.x = self.folderBg.x + folderBgImg:getWidth() / 2 - droppedNote.img:getWidth() / 1.5 * scale
         droppedNote.y = self.folderBg.y + 40 * scale
         if droppedNote.y > wH then
@@ -161,6 +171,10 @@ function folder:drawFront()
         lg.draw(folderView, 0, 0, 0, scale, scale)
         for i = 1, #notesInFolder do
             local note = notesInFolder[i]
+
+            note.x = 90 + 28 + (10 + note.img:getWidth()) * (i - 1)
+            note.y = 150
+            note:draw()
         end
     end
 end
