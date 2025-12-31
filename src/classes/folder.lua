@@ -3,6 +3,7 @@ local folder = {
 
 folderBgImg = lg.newImage("assets/screens/folder-bg.png")
 folderFrontImg = lg.newImage("assets/screens/folder-front.png")
+folderView = lg.newImage("assets/screens/folder-view.png")
 
 function folder:load()
     self.folderBg = {
@@ -125,6 +126,13 @@ function folder:mousedown(x, y, button)
         note.dragOffsetX = x - note.x
         note.dragOffsetY = y - note.y
     end
+    if button == 1 then
+        if self.isHovering then
+            self.opened = true
+        else
+            self.opened = false
+        end
+    end
 end
 
 function folder:mouserelease(x, y, button)
@@ -139,16 +147,19 @@ end
 
 function folder:drawBack()
     if not self.opened then
-            lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
-
+        lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
     end
 end
 
 function folder:drawFront()
-    if not holdingNote and not noteDropped then
-        lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
+    if not self.opened then
+        if not holdingNote and not noteDropped then
+            lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
+        end
+        lg.draw(folderFrontImg, self.folderFront.x, self.folderFront.y, 0, scale, scale)
+    elseif self.opened then
+        lg.draw(folderView, 0, 0, 0, scale, scale)
     end
-    lg.draw(folderFrontImg, self.folderFront.x, self.folderFront.y, 0, scale, scale)
 end
 
 return folder
