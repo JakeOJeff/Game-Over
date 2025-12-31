@@ -31,6 +31,7 @@ function folder:load()
     -- Track current state
     self.isHovering = false
     self.wasHovering = false
+    self.opened = false
 end
 
 function folder:createTweens()
@@ -137,7 +138,10 @@ function folder:mouserelease(x, y, button)
 end
 
 function folder:drawBack()
-    lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
+    if not self.opened then
+            lg.draw(folderBgImg, self.folderBg.x, self.folderBg.y, 0, scale, scale)
+
+    end
 end
 
 function folder:drawFront()
