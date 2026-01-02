@@ -43,7 +43,7 @@ function TELEPHONE:load()
         
     }
 
-    self.display = ""
+    self.display = "668231"
 
 
     local no = 0
@@ -81,6 +81,16 @@ end
 function TELEPHONE:update(dt)
     telnav:update(dt)
         folder:update(dt)
+        local sS = self.subtitles
+
+    if sS.debounce then
+        if sS.index == #sS.text then sS.debounce = false end
+        sS.timer = sS.timer + 1 * dt
+        if sS.timer >= sS.delay and sS.index < #sS.text then
+            sS.index = sS.index + 1
+            sS.timer = 0
+        end
+    end
 
     update_buttons(dt)
 end
@@ -102,6 +112,12 @@ function TELEPHONE:draw()
         folder:drawBack()
     folder:drawFront()
 
+    lg.setFont(fontM)
+    if self.subtitles.debounce then
+        local subtitle = self.subtitles.text[self.subtitles.index]
+        lg.print(subtitle, wW/2 - fontM:getWidth(subtitle)/2, wH - fontM:getHeight() - 40 )
+    end
+
 end
 
 function TELEPHONE:mousepressed(x, y, button)
@@ -121,6 +137,7 @@ function TELEPHONE:checkCode(code)
 end
 
 function TELEPHONE:call(name)
-    
+    print(name)
+    self.subtitles.text = self.people[name]
 end
 return TELEPHONE

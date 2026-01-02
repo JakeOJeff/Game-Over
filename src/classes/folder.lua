@@ -126,6 +126,10 @@ function folder:update(dt)
 end
 
 function folder:mousedown(x, y, button)
+    if folder.opened then
+            mousedown_notes(x, y, button, notesInFolder)
+
+    end
     if #notesInFolder > 1 and button == 2 and not activeKnot then
         local note = notesInFolder[#notesInFolder]
         table.insert(notes, note)
@@ -146,6 +150,7 @@ function folder:mousedown(x, y, button)
 end
 
 function folder:mouserelease(x, y, button)
+        
     if #notesInFolder > 1 and button == 2 and not activeKnot then
         local note = notesInFolder[#notesInFolder]
         if note.dragging then

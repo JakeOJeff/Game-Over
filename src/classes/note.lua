@@ -31,8 +31,11 @@ function Note:new(x, y, text, type, content)
         headerImg = headerImg,
         pickupSound = pickupSound,
         crumpleSound = crumpleSound,
-        header = { x = 0, y = 0 },
-        knotPoints = {},
+        header = {
+            x = 0,
+            y = 0
+        },
+        knotPoints = {}
     }
     if n.type == "img-note" then
         n.img = photoNormalImg
@@ -41,7 +44,9 @@ function Note:new(x, y, text, type, content)
         n.content = content or photoDefaultContentImg
     end
     n.currentImg = n.img
-    local meta = setmetatable(n, { __index = self })
+    local meta = setmetatable(n, {
+        __index = self
+    })
     table.insert(notes, meta)
     return meta
 end
@@ -62,15 +67,15 @@ function Note:update(dt)
         self.y = math.max(border, math.min(wH - border - noteHeight, newY))
     end
     local mx, my = love.mouse.getPosition()
-    if mx > self.x and mx < self.x + self.img:getWidth() and
-        my > self.y and my < self.y + self.img:getHeight() then
+    if mx > self.x and mx < self.x + self.img:getWidth() and my > self.y and my < self.y + self.img:getHeight() then
         self.currentImg = self.hoverImg
         if my > self.y + self.img:getHeight() - 30 * scale and self.type == "text-note" and holdingNote == nil then
             if love.mouse.isDown(1) and not self.holding then
                 self.crumpleSound:play()
                 self.holding = true
             end
-        elseif my > self.y + self.img:getHeight() - 30 * scale and mx > self.x + self.img:getWidth() - 40 * scale and self.type == "img-note" and holdingNote == nil then
+        elseif my > self.y + self.img:getHeight() - 30 * scale and mx > self.x + self.img:getWidth() - 40 * scale and
+            self.type == "img-note" and holdingNote == nil then
             if love.mouse.isDown(1) and not self.holding then
                 self.crumpleSound:play()
                 self.holding = true
@@ -96,31 +101,36 @@ function Note:update(dt)
 end
 
 function Note:draw()
-    if self.dragging then
-        lg.setColor(0, 0, 0, 0.5)
-        lg.draw(self.currentImg, self.x - 10 * scale, self.y - 10 * scale)
+
+    if (folder.opened and noteDropped ~= self) or not folder.opened then
+        if self.dragging then
+            lg.setColor(0, 0, 0, 0.5)
+            lg.draw(self.currentImg, self.x - 10 * scale, self.y - 10 * scale)
+        end
+        lg.setColor(1, 1, 1, 1)
+        lg.draw(self.currentImg, self.x, self.y)
+        if not folder.opened then
+            lg.draw(self.headerImg, self.header.x, self.header.y)
+        end
+        lg.setFont(fontSS)
+        if self.type == "img-note" then
+            lg.draw(self.content, self.x + 18 * scale, self.y + 34 * scale, 0, 164 / self.content:getWidth() * scale,
+                98 / self.content:getHeight() * scale)
+        else
+            lg.setColor(41 / 255, 30 / 255, 22 / 255)
+            lg.printf(self.text, self.x + 20 * scale, self.y + 80 * scale, self.img:getWidth() - 40 * scale)
+        end
     end
-    lg.setColor(1, 1, 1, 1)
-    lg.draw(self.currentImg, self.x, self.y)
-    lg.draw(self.headerImg, self.header.x, self.header.y)
-    lg.setFont(fontSS)
-    if self.type == "img-note" then
-        lg.draw(self.content, self.x + 18 * scale, self.y + 34 * scale, 0, 164 / self.content:getWidth() * scale,
-            98 / self.content:getHeight() * scale)
-    else
-        lg.setColor(41 / 255, 30 / 255, 22 / 255)
-        lg.printf(self.text, self.x + 20 * scale, self.y + 80 * scale, self.img:getWidth() - 40 * scale)
-    end
+
     lg.setColor(1, 1, 1)
 end
 
 function Note:mousedown(x, y, button)
     -- normal dragging
 
-
     -- knot clicking
-    if x > self.header.x and x < self.header.x + self.headerImg:getWidth() and
-        y > self.header.y and y < self.header.y + self.headerImg:getHeight() then
+    if x > self.header.x and x < self.header.x + self.headerImg:getWidth() and not folder.opened and y > self.header.y and
+        y < self.header.y + self.headerImg:getHeight() then
         if button == 1 then
             if not activeKnot then
                 -- start a new knot
@@ -131,8 +141,7 @@ function Note:mousedown(x, y, button)
                 love.mouse.setCursor()
             end
         end
-    elseif x > self.x and x < self.x + self.img:getWidth() and
-        y > self.y and y < self.y + self.img:getHeight() then
+    elseif x > self.x and x < self.x + self.img:getWidth() and y > self.y and y < self.y + self.img:getHeight() then
         if button == 1 then
             self.pickupSound:play()
             self.dragging = true
@@ -184,9 +193,9 @@ function Note:mouserelease(button)
             self.y = self.y - 10 * scale
         end
         if self.holding then
-            if self.x < folder.folderBg.x + folderBgImg:getWidth() * scale and self.x + self.img:getWidth() > folder.folderBg.x and
-                self.y < folder.folderBg.y + folderBgImg:getHeight() * scale and
-                self.y + self.img:getHeight() > folder.folderBg.y then
+            if self.x < folder.folderBg.x + folderBgImg:getWidth() * scale and self.x + self.img:getWidth() >
+                folder.folderBg.x and self.y < folder.folderBg.y + folderBgImg:getHeight() * scale and self.y +
+                self.img:getHeight() > folder.folderBg.y then
                 -- dropped in folder
                 noteDropped = self
                 self.knotPoints = {}
@@ -217,10 +226,11 @@ function draw_notes()
     end
 end
 
-function mousedown_notes(x, y, button)
+function mousedown_notes(x, y, button, notesT)
     -- loop from topmost note to bottommost
-    for i = #notes, 1, -1 do
-        local v = notes[i]
+    local notesTable = notesT or notes
+    for i = #notesTable, 1, -1 do
+        local v = notesTable[i]
         local oldActive = activeKnot
         local oldDragging = v.dragging
 
@@ -229,7 +239,7 @@ function mousedown_notes(x, y, button)
         -- If this note started dragging OR the activeKnot changed (started or finished), it handled the click
         if v.dragging ~= oldDragging or oldActive ~= activeKnot then
             -- bring this note to the top (last in array)
-            table.remove(notes, i)
+            table.remove(notesTable, i)
             table.insert(notes, v)
             break
         end
