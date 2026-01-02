@@ -139,5 +139,6 @@ end
 function TELEPHONE:call(name)
     print(name)
     self.subtitles.text = self.people[name]
+    self.subtitles.debounce = true
 end
 return TELEPHONE
