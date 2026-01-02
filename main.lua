@@ -34,10 +34,10 @@ Note:load()
 
 
 local scenery = SceneryInit(
-    { path = "src.end", key = "END" , default = true },
+    { path = "src.end", key = "END"},
     { path = "src.transition", key = "TRANSITION" },
     { path = "src.reality", key = "REALITY"},
-    { path = "src.telephone", key = "TELEPHONE" }
+    { path = "src.telephone", key = "TELEPHONE" , default = true  }
 )
 -- NOTES
 note = Note:new(40, 40,

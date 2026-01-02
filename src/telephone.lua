@@ -27,10 +27,13 @@ function TELEPHONE:load()
 
     self.people = {
         ["Janitor"] = {
+            "",
+            "",
             "Hello?",
             "Jack?",
             "I have done what you asked",
-            "Is that you there?"
+            "Is that you there?",
+            ""
         }
     }
 
@@ -115,6 +118,9 @@ function TELEPHONE:draw()
     lg.setFont(fontM)
     if self.subtitles.debounce then
         local subtitle = self.subtitles.text[self.subtitles.index]
+        lg.setColor(0,0,0)
+                lg.print(subtitle, wW/2 - fontM:getWidth(subtitle)/2, wH - fontM:getHeight() - 37 )
+        lg.setColor(1,1,1)
         lg.print(subtitle, wW/2 - fontM:getWidth(subtitle)/2, wH - fontM:getHeight() - 40 )
     end
 
