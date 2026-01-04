@@ -37,7 +37,9 @@ local scenery = SceneryInit(
     { path = "src.end", key = "END"},
     { path = "src.transition", key = "TRANSITION" },
     { path = "src.reality", key = "REALITY"},
-    { path = "src.telephone", key = "TELEPHONE" , default = true  }
+    { path = "src.telephone", key = "TELEPHONE" },
+        { path = "src.bookshelf", key = "BOOKSHELF" , default = true  }
+
 )
 -- NOTES
 note = Note:new(40, 40,
