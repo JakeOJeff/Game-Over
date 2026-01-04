@@ -40,7 +40,7 @@ function TELEPHONE:load()
     self.subtitles = {
         text = {},
         index = 1,
-        delay = 2,
+        delay = 3,
         timer = 0,
         debounce = false
         

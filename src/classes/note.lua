@@ -241,6 +241,7 @@ function mousedown_notes(x, y, button, notesT)
             -- bring this note to the top (last in array)
             table.remove(notesTable, i)
             table.insert(notes, v)
+            
             break
         end
     end
