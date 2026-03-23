@@ -16,8 +16,22 @@ local rectShelves = {
     },
 }
 
+local hoverTarget = {
+    x = wW/2 - 30,
+    w = 60,
+
+    y = 0,
+    h = wH - 200
+}
+
 function BOOKSHELF:load()
-    
+    energyBar = {
+        max = 20,
+        fill = 0,
+        rate = 2,
+        decr = 4,
+        decrT = 1
+    }
 end
 
 function BOOKSHELF:update(dt)
@@ -31,6 +45,12 @@ function BOOKSHELF:draw()
     lg.setColor(1,1,0)    
     drawRectangle("fill", rS[2].x, rS[2].y, rS[2].w, rS[2].h, rS[2].w, rS[2].h, 0)
 
+
+
+end
+
+function BOOKSHELF:mousepressed(x, y, button)
+    
 end
 
 function drawRectangle(mode, x, y, width, height, ox, oy, angle)
