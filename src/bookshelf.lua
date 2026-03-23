@@ -96,6 +96,10 @@ function BOOKSHELF:update(dt)
         if panelling.y > panellingDef.y then
             panelling.y = math.max(panellingDef.y, panelling.y - 60 * dt)
         end
+    elseif panelState == "PULLED" then
+        if panelling.y < panellingDef.y + 245 then
+            panelling.y = math.min(panellingDef.y + 300, panelling.y + (panelling.y/(panellingDef.y + 245)) * 600 * dt)
+        end
     end
 
 
