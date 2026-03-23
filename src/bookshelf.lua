@@ -26,6 +26,8 @@ local hoverTarget = {
     hovering = false
 }
 
+local clickCircles = {}
+
 function BOOKSHELF:load()
     energyBar = {
         max = 20,
@@ -46,6 +48,13 @@ function BOOKSHELF:update(dt)
         hoverTarget.hovering = false
     end
 
+    for i, v in ipairs(clickCircles) do
+        
+        v.t = math.max(0, v.t - dt)
+        v.rad = v.t/1 * v.rad
+        if v.t <= 0 then table.remove(clickCircles, i) end
+    
+    end
 end
 
 function BOOKSHELF:draw()
@@ -56,12 +65,19 @@ function BOOKSHELF:draw()
     lg.setColor(1,1,0)    
     drawRectangle("fill", rS[2].x, rS[2].y, rS[2].w, rS[2].h, rS[2].w, rS[2].h, 0)
 
-
-
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
-    
+    if hoverTarget.hovering and button == 1 then
+        table.insert(clickCircles, {
+            x = x,
+            y = y,
+            rad = 5,
+            t = 1
+        })
+
+        energyBar.fill = math.min(energyBar.max, energyBar.fill + energyBar.rate)
+    end
 end
 
 function drawRectangle(mode, x, y, width, height, ox, oy, angle)
