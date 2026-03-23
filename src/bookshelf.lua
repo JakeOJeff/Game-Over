@@ -21,10 +21,10 @@ local rectShelves = {
 local panelling = {
     w = 200,
     h = 200,
-    x = wW/2,
+    x = wW / 2,
     y = wH - 400
 }
-local rectState = "STUCK" -- Stuck/Falling/Fallen
+local rectState = "STUCK"  -- Stuck/Falling/Fallen
 local panelState = "STUCK" -- Stuck/Pulling/Pulled
 
 local hoverTarget = {
@@ -62,6 +62,10 @@ end
 function BOOKSHELF:update(dt)
     mx, my = love.mouse.getPosition()
 
+    if panelState == "PULLING" then
+        pointLines[2].x, pointLines[2].y = mx, my
+    end
+
     if mx > hoverTarget.x and mx < hoverTarget.x + hoverTarget.w and my > hoverTarget.y and my < hoverTarget.y + hoverTarget.h then
         hoverTarget.hovering = true
     else
@@ -80,12 +84,13 @@ function BOOKSHELF:update(dt)
 
 
     if energyBar.fill >= energyBar.max and rectShelves[1].rot > 0 then
-                rectState = "FALLING"
+        rectState = "FALLING"
 
         rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((rectRot / 3 / rectShelves[1].rot)) * dt)
-        if rectShelves[1].rot <= 0 then rectState = "FALLEN"
+        if rectShelves[1].rot <= 0 then
+            rectState = "FALLEN"
             hoverTarget = {
-                x = panelling.x - panelling.w/2,
+                x = panelling.x - panelling.w / 2,
                 y = panelling.y - panelling.h,
                 w = panelling.w,
                 h = panelling.h,
@@ -100,8 +105,8 @@ end
 
 function BOOKSHELF:draw()
     local rS = rectShelves
-    lg.setColor(0,0,1)
-    drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w/2, panelling.h, 0)
+    lg.setColor(0, 0, 1)
+    drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
     lg.setColor(1, 0, 1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
     lg.setColor(1, 1, 0)
@@ -112,6 +117,12 @@ function BOOKSHELF:draw()
         if v.rad >= 1 then
             lg.circle("line", v.x, v.y, v.rad)
         end
+    end
+    if panelState == "PULLING" then
+        lg.setColor(1, 1, 1)
+        lg.circle("line", pointLines[1].x, pointLines[2].y, 2)
+        lg.circle("line", pointLines[1].x, pointLines[2].y, 2)
+        lg.line(pointLines[1].x, pointLines[1].y, pointLines[2].x, pointLines[2].y)
     end
 
 
@@ -140,6 +151,12 @@ function BOOKSHELF:mousepressed(x, y, button)
         })
 
         energyBar.fill = math.min(energyBar.max, energyBar.fill + energyBar.rate)
+
+        if rectState == "FALLEN" then
+            print("YE")
+            panelState = "PULLING"
+            pointLines[1].x, pointLines[1].y = x, y
+        end
     end
 end
 
