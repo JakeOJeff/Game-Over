@@ -120,8 +120,8 @@ function BOOKSHELF:draw()
     end
     if panelState == "PULLING" then
         lg.setColor(1, 1, 1)
-        lg.circle("line", pointLines[1].x, pointLines[2].y, 2)
-        lg.circle("line", pointLines[1].x, pointLines[2].y, 2)
+        lg.circle("line", pointLines[1].x, pointLines[1].y, 2)
+        lg.circle("line", pointLines[2].x, pointLines[2].y, 2)
         lg.line(pointLines[1].x, pointLines[1].y, pointLines[2].x, pointLines[2].y)
     end
 
@@ -157,6 +157,18 @@ function BOOKSHELF:mousepressed(x, y, button)
             panelState = "PULLING"
             pointLines[1].x, pointLines[1].y = x, y
         end
+    end
+end
+
+function BOOKSHELF:mousereleased(x, y, button)
+    if panelState == "PULLING" then
+        if pointLines[2].y - pointLines[1].y > 200 and  math.abs(pointLines[2].x - pointLines[1].x) < 50 then
+            panelState = "PULLED"
+        else
+            panelState = "STUCK"
+        end
+        print(panelState)
+
     end
 end
 
