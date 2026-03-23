@@ -32,7 +32,7 @@ function BOOKSHELF:load()
     energyBar = {
         max = 20,
         fill = 0,
-        rate = 2,
+        rate = 5,
         decr = 0.15,
     }
 end
@@ -51,6 +51,16 @@ function BOOKSHELF:update(dt)
         v.rad = v.t / 1 * v.rad
         if v.t <= 0 then table.remove(clickCircles, i) end
     end
+
+    if energyBar.fill ~= 0 and energyBar.fill < energyBar.max then
+        energyBar.fill = math.max(0, energyBar.fill - energyBar.decr)
+    end
+
+    if energyBar.fill >= energyBar.max then
+        rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((9.5/3/rectShelves[1].rot)) * dt)
+    else
+            rectShelves[1].rot =  9.5 - (9.5/3) * energyBar.fill/energyBar.max
+    end
 end
 
 function BOOKSHELF:draw()
@@ -66,9 +76,7 @@ function BOOKSHELF:draw()
             lg.circle("line", v.x, v.y, v.rad)
         end
     end
-    if energyBar.fill ~= 0 and energyBar.fill < energyBar.max then
-        energyBar.fill = math.max(0, energyBar.fill - energyBar.decr)
-    end
+
 
     if hoverTarget.hovering then
         lg.setFont(fontM)
