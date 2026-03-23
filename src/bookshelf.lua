@@ -18,11 +18,15 @@ local rectShelves = {
     },
 }
 
+local panellingDef = {
+    x = wW / 2,
+    y = wH - 400
+}
 local panelling = {
     w = 200,
     h = 200,
-    x = wW / 2,
-    y = wH - 400
+    x = panellingDef.x,
+    y = panellingDef.y
 }
 local rectState = "STUCK"  -- Stuck/Falling/Fallen
 local panelState = "STUCK" -- Stuck/Pulling/Pulled
@@ -82,6 +86,18 @@ function BOOKSHELF:update(dt)
         energyBar.fill = math.max(0, energyBar.fill - energyBar.decr)
     end
 
+    if panelState == "FAILED" then
+        if panelling.y < panellingDef.y + 30 then
+            panelling.y = math.min(panellingDef.y + 30, panelling.y + 60 * dt)
+        else
+            panelState = "STUCK"
+        end
+    elseif panelState == "STUCK" then
+        if panelling.y > panellingDef.y then
+            panelling.y = math.max(panellingDef.y, panelling.y - 60 * dt)
+        end
+    end
+
 
     if energyBar.fill >= energyBar.max and rectShelves[1].rot > 0 then
         rectState = "FALLING"
@@ -101,6 +117,8 @@ function BOOKSHELF:update(dt)
     elseif energyBar.fill < energyBar.max then
         rectShelves[1].rot = rectRot - (rectRot / 3) * energyBar.fill / energyBar.max
     end
+
+    print(collectgarbage("collect"))
 end
 
 function BOOKSHELF:draw()
@@ -153,7 +171,6 @@ function BOOKSHELF:mousepressed(x, y, button)
         energyBar.fill = math.min(energyBar.max, energyBar.fill + energyBar.rate)
 
         if rectState == "FALLEN" then
-            print("YE")
             panelState = "PULLING"
             pointLines[1].x, pointLines[1].y = x, y
         end
@@ -162,13 +179,11 @@ end
 
 function BOOKSHELF:mousereleased(x, y, button)
     if panelState == "PULLING" then
-        if pointLines[2].y - pointLines[1].y > 200 and  math.abs(pointLines[2].x - pointLines[1].x) < 50 then
+        if pointLines[2].y - pointLines[1].y > 200 and math.abs(pointLines[2].x - pointLines[1].x) < 50 then
             panelState = "PULLED"
         else
-            panelState = "STUCK"
+            panelState = "FAILED"
         end
-        print(panelState)
-
     end
 end
 
