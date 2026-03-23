@@ -65,6 +65,14 @@ function BOOKSHELF:draw()
     lg.setColor(1,1,0)    
     drawRectangle("fill", rS[2].x, rS[2].y, rS[2].w, rS[2].h, rS[2].w, rS[2].h, 0)
 
+    lg.setColor(1,1,1)
+    for i, v in ipairs(clickCircles) do
+        if v.rad >= 1 then
+                    lg.circle("line",v.x, v.y, v.rad)
+
+        end
+    end
+
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
@@ -72,7 +80,7 @@ function BOOKSHELF:mousepressed(x, y, button)
         table.insert(clickCircles, {
             x = x,
             y = y,
-            rad = 5,
+            rad = 30,
             t = 1
         })
 
