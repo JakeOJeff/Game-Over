@@ -128,6 +128,8 @@ end
 function BOOKSHELF:draw()
     local rS = rectShelves
     lg.setColor(0, 0, 1)
+        drawRectangle("line", panellingDef.x, panellingDef.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
+
     drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
     lg.setColor(1, 0, 1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
@@ -185,6 +187,7 @@ function BOOKSHELF:mousereleased(x, y, button)
     if panelState == "PULLING" then
         if pointLines[2].y - pointLines[1].y > 200 and math.abs(pointLines[2].x - pointLines[1].x) < 50 then
             panelState = "PULLED"
+            text = "Inspect"
         else
             panelState = "FAILED"
         end
