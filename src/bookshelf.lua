@@ -1,20 +1,31 @@
 local BOOKSHELF = {}
+local text = "Move Shelf"
 
+local rectRot = 36
 local rectShelves = {
     {
         w = 400,
         h = wH / 1.5,
-        x = 600,
-        y = wH - 200,
-        rot = 9.5
+        x = 500,
+        y = wH - 150,
+        rot = rectRot
     },
     {
         w = 400,
         h = wH / 1.5,
-        x = wW - 200,
-        y = wH - 200
+        x = wW - 100,
+        y = wH - 150
     },
 }
+
+local panelling = {
+    w = 200,
+    h = 200,
+    x = wW/2,
+    y = wH - 400
+}
+local rectState = "STUCK" -- Stuck/Falling/Fallen
+local panelState = "STUCK" -- Stuck/Pulling/Pulled
 
 local hoverTarget = {
     x = wW / 2 - 30,
@@ -27,6 +38,17 @@ local hoverTarget = {
 }
 
 local clickCircles = {}
+local pointLines = {
+    {
+        x = 0,
+        y = 0,
+    },
+    {
+        x = 0,
+        y = 0,
+    },
+}
+
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
@@ -56,15 +78,30 @@ function BOOKSHELF:update(dt)
         energyBar.fill = math.max(0, energyBar.fill - energyBar.decr)
     end
 
-    if energyBar.fill >= energyBar.max then
-        rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((9.5/3/rectShelves[1].rot)) * dt)
-    else
-            rectShelves[1].rot =  9.5 - (9.5/3) * energyBar.fill/energyBar.max
+
+    if energyBar.fill >= energyBar.max and rectShelves[1].rot > 0 then
+                rectState = "FALLING"
+
+        rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((rectRot / 3 / rectShelves[1].rot)) * dt)
+        if rectShelves[1].rot <= 0 then rectState = "FALLEN"
+            hoverTarget = {
+                x = panelling.x - panelling.w/2,
+                y = panelling.y - panelling.h,
+                w = panelling.w,
+                h = panelling.h,
+                hovering = false
+            }
+            text = "Pull Panel"
+        end
+    elseif energyBar.fill < energyBar.max then
+        rectShelves[1].rot = rectRot - (rectRot / 3) * energyBar.fill / energyBar.max
     end
 end
 
 function BOOKSHELF:draw()
     local rS = rectShelves
+    lg.setColor(0,0,1)
+    drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w/2, panelling.h, 0)
     lg.setColor(1, 0, 1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
     lg.setColor(1, 1, 0)
@@ -79,14 +116,18 @@ function BOOKSHELF:draw()
 
 
     if hoverTarget.hovering then
-        lg.setFont(fontM)
-        local text = "Move Shelf" 
-        lg.print(text, mx - fontM:getWidth(text)/2, my + 20)
-        lg.rectangle("fill", mx - fontM:getWidth(text)/2, my + 20 + fontM:getHeight(), fontM:getWidth(text), 20)
-        lg.setColor(0,0,1)
-        lg.rectangle("fill", mx - fontM:getWidth(text)/2, my + 20 + fontM:getHeight(), fontM:getWidth(text) * energyBar.fill/energyBar.max, 20)
+        if rectState ~= "FALLING" then
+            lg.setFont(fontM)
+            lg.print(text, mx - fontM:getWidth(text) / 2, my + 20)
+        end
+
+        if rectState == "STUCK" then
+            lg.rectangle("fill", mx - fontM:getWidth(text) / 2, my + 20 + fontM:getHeight(), fontM:getWidth(text), 20)
+            lg.setColor(0, 0, 1)
+            lg.rectangle("fill", mx - fontM:getWidth(text) / 2, my + 20 + fontM:getHeight(),
+                fontM:getWidth(text) * energyBar.fill / energyBar.max, 20)
+        end
     end
-    
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
