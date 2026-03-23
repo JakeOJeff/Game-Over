@@ -21,7 +21,9 @@ local hoverTarget = {
     w = 60,
 
     y = 0,
-    h = wH - 200
+    h = wH - 200,
+
+    hovering = false
 }
 
 function BOOKSHELF:load()
@@ -32,9 +34,18 @@ function BOOKSHELF:load()
         decr = 4,
         decrT = 1
     }
+
 end
 
 function BOOKSHELF:update(dt)
+    local mx, my = love.mouse.getPosition()
+
+    if mx > hoverTarget.x and mx < hoverTarget.x + hoverTarget.w and my > hoverTarget.y and my < hoverTarget.y + hoverTarget.h then
+        hoverTarget.hovering = true
+    else
+        hoverTarget.hovering = false
+    end
+
 end
 
 function BOOKSHELF:draw()
