@@ -122,7 +122,9 @@ function BOOKSHELF:update(dt)
         rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((rectRot / 3 / rectShelves[1].rot)) * dt)
         if rectShelves[1].rot <= 0 then
             rectState = "FALLEN"
-            createFlatParticles(200, 2, rectShelves[1].x + rectShelves[1].w, rectShelves[1].y, rectShelves[1].w, -1)
+
+            createFlatParticles(200, 2, rectShelves[1].x - rectShelves[1].w, rectShelves[1].y, rectShelves[1].w, -1)
+
             hoverTarget = {
                 x = panelling.x - panelling.w / 2,
                 y = panelling.y - panelling.h,
@@ -152,7 +154,7 @@ function BOOKSHELF:draw()
 
 
     for i, v in ipairs(particles) do
-        lg.setColor(1, 1, 1)
+        lg.setColor(1, 1, 1, v.life/v.maxLife)
         lg.circle("line", v.x, v.y, 3)
     end
     lg.setColor(1, 1, 1)
@@ -229,8 +231,9 @@ function createFlatParticles(amt, life, x, y, width, dir)
                 y = y,
                 dir = dir,
                 life = life,
-                vx = love.math.random(-50, 50),
-                vy = love.math.random(-150, -50)
+                maxLife = life,
+                vx = love.math.random(-25, 25),
+                vy = love.math.random(-60, -10)
             })
     end
 end
