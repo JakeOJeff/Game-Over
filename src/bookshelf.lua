@@ -109,9 +109,12 @@ function BOOKSHELF:update(dt)
         if panelling.y > panellingDef.y then
             panelling.y = math.max(panellingDef.y, panelling.y - 60 * dt)
         end
-    elseif panelState == "PULLED" then
+    elseif panelState == "MOVING" then
         if panelling.y < panellingDef.y + 245 then
             panelling.y = math.min(panellingDef.y + 300, panelling.y + (panelling.y / (panellingDef.y + 245)) * 600 * dt)
+        else
+            panelState = "PULLED"
+                        createFlatParticles(100, 3, panelling.x - panelling.w/2, panelling.y, panelling.w, -1)
         end
     end
 
@@ -209,7 +212,8 @@ end
 function BOOKSHELF:mousereleased(x, y, button)
     if panelState == "PULLING" then
         if pointLines[2].y - pointLines[1].y > 200 and math.abs(pointLines[2].x - pointLines[1].x) < 50 then
-            panelState = "PULLED"
+            panelState = "MOVING"
+            
             text = "Inspect"
         else
             panelState = "FAILED"
