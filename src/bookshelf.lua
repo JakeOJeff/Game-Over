@@ -53,6 +53,8 @@ local pointLines = {
     },
 }
 
+local particles = {}
+
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
@@ -68,6 +70,17 @@ function BOOKSHELF:update(dt)
 
     if panelState == "PULLING" then
         pointLines[2].x, pointLines[2].y = mx, my
+    end
+
+    for i = #particles, 1, -1 do
+        local v = particles[i]
+            v.x = v.x + v.vx * dt
+            v.y = v.y + v.vy * dt
+            v.life = v.life - dt
+
+        if v.life <= 0 then
+            table.remove(particles, i)
+        end
     end
 
     if mx > hoverTarget.x and mx < hoverTarget.x + hoverTarget.w and my > hoverTarget.y and my < hoverTarget.y + hoverTarget.h then
@@ -98,7 +111,7 @@ function BOOKSHELF:update(dt)
         end
     elseif panelState == "PULLED" then
         if panelling.y < panellingDef.y + 245 then
-            panelling.y = math.min(panellingDef.y + 300, panelling.y + (panelling.y/(panellingDef.y + 245)) * 600 * dt)
+            panelling.y = math.min(panellingDef.y + 300, panelling.y + (panelling.y / (panellingDef.y + 245)) * 600 * dt)
         end
     end
 
@@ -109,6 +122,7 @@ function BOOKSHELF:update(dt)
         rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((rectRot / 3 / rectShelves[1].rot)) * dt)
         if rectShelves[1].rot <= 0 then
             rectState = "FALLEN"
+            createFlatParticles(200, 2, rectShelves[1].x + rectShelves[1].w, rectShelves[1].y, rectShelves[1].w, -1)
             hoverTarget = {
                 x = panelling.x - panelling.w / 2,
                 y = panelling.y - panelling.h,
@@ -128,7 +142,7 @@ end
 function BOOKSHELF:draw()
     local rS = rectShelves
     lg.setColor(0, 0, 1)
-        drawRectangle("line", panellingDef.x, panellingDef.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
+    drawRectangle("line", panellingDef.x, panellingDef.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
 
     drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
     lg.setColor(1, 0, 1)
@@ -136,12 +150,18 @@ function BOOKSHELF:draw()
     lg.setColor(1, 1, 0)
     drawRectangle("fill", rS[2].x, rS[2].y, rS[2].w, rS[2].h, rS[2].w, rS[2].h, 0)
 
+
+    for i, v in ipairs(particles) do
+        lg.setColor(1, 1, 1)
+        lg.circle("line", v.x, v.y, 3)
+    end
     lg.setColor(1, 1, 1)
     for i, v in ipairs(clickCircles) do
         if v.rad >= 1 then
             lg.circle("line", v.x, v.y, v.rad)
         end
     end
+
     if panelState == "PULLING" then
         lg.setColor(1, 1, 1)
         lg.circle("line", pointLines[1].x, pointLines[1].y, 2)
@@ -200,6 +220,19 @@ function drawRectangle(mode, x, y, width, height, ox, oy, angle)
     love.graphics.rotate(math.rad(angle))
     love.graphics.rectangle(mode, -ox, -oy, width, height)
     love.graphics.pop()
+end
+
+function createFlatParticles(amt, life, x, y, width, dir)
+    for i = 1, amt do
+            table.insert(particles, {
+                x = love.math.random(x, x + width),
+                y = y,
+                dir = dir,
+                life = life,
+                vx = love.math.random(-50, 50),
+                vy = love.math.random(-150, -50)
+            })
+    end
 end
 
 return BOOKSHELF
