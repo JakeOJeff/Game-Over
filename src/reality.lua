@@ -9,7 +9,6 @@ end
 function REALITY:update(dt)
     update_notes(dt)
     update_knots(dt)
-    realitynav:update(dt)
     folder:update(dt)
 end
 
@@ -26,6 +25,8 @@ function REALITY:mousepressed(x, y, button)
     mousedown_notes(x, y, button)
     mousedown_knots(x, y, button)
     folder:mousedown(x, y, button)
+    realitynav:mousepressed(x, y, button)
+
 end
 
 function REALITY:mousereleased(x, y, button)

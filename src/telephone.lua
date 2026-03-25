@@ -16,6 +16,7 @@ local enterTelButtPressed = lg.newImage("assets/screens/enter-button-normal.png"
 function TELEPHONE:load()
     buttons = {}
     telnav = nav:new(self, nil, "REALITY")
+
     folder:load()
 
     self.codes = {
@@ -82,7 +83,6 @@ function TELEPHONE:load()
 end
 
 function TELEPHONE:update(dt)
-    telnav:update(dt)
         folder:update(dt)
         local sS = self.subtitles
 
@@ -92,6 +92,10 @@ function TELEPHONE:update(dt)
         if sS.timer >= sS.delay and sS.index < #sS.text then
             sS.index = sS.index + 1
             sS.timer = 0
+
+            -- SHOW LEFT AREA AFTER CALL IS DONE
+                        telnav.left = "BOOKSHELF"
+
         end
     end
 
@@ -128,6 +132,7 @@ end
 
 function TELEPHONE:mousepressed(x, y, button)
     mousepressed_buttons(x, y, button)
+    telnav:mousepressed(x, y, button)
 end
 
 function TELEPHONE:mousereleased(x, y, button)
