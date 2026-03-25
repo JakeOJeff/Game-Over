@@ -92,7 +92,7 @@ function BOOKSHELF:update(dt)
     if panelState == "PULLING" then
         pointLines[2].x, pointLines[2].y = mx, my
     end
-
+    calculateCurrentItemState()
     for i = #particles, 1, -1 do
         local v = particles[i]
             v.x = v.x + v.vx * dt
@@ -210,6 +210,24 @@ function BOOKSHELF:draw()
                 fontM:getWidth(text) * energyBar.fill / energyBar.max, 20)
         end
     end
+
+    -- item hover please change this later thank you <3
+
+    local centerX = wW/2
+    local centerY = wH/2
+    lg.push()
+
+    lg.translate(centerX, centerY)
+
+    lg.rotate(item.currentTiltX)
+    lg.rotate(item.currentTiltY)
+
+    lg.scale(item.currentScale, item.currentScale)
+
+    lg.setColor(1,1,1)
+    lg.draw(item.img, -item.imgW/2, -item.imgH/2)
+
+    lg.pop()
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
@@ -264,9 +282,8 @@ function createFlatParticles(amt, life, x, y, width, dir)
     end
 end
 
-function calculateCurrentItemState(currentTiltX, currentTiltY, currentScale)
+function calculateCurrentItemState()
     
-
     local mouseX = math.min(wW - 1, math.max(0, mx)) 
     local mouseY = math.min(wH - 1, math.max(0, my))
 
@@ -282,10 +299,9 @@ function calculateCurrentItemState(currentTiltX, currentTiltY, currentScale)
     local targetScale = 1 + item.maxScale * ( 1 - dOC)
 
 
-    return currentTiltX + (targetTiltX - currentTiltX) * item.smoothness,
-    currentTiltY + (targetTiltY - currentTiltY) * item.smoothness,
-    currentScale + (targetScale - currentScale) * item.smoothness
-end
+    item.currentTiltX = item.currentTiltX + (targetTiltX - item.currentTiltX) * item.smoothness
+    item.currentTiltY = item.currentTiltY + (targetTiltY - item.currentTiltY) * item.smoothness
+    item.currentScale = item.currentScale + (targetScale - item.currentScale) * item.smoothness
 end
 
 return BOOKSHELF
