@@ -63,13 +63,19 @@ local item = {
     
     maxTilt = 0.3,
     maxScale = 0.1,
+    smoothness = 0.1,
 
     currentTiltX = 0,
     currentTiltY = 0,
     currentScale = 1,
-    currentScaleX = 1,
-    currentScaleY = 1,
-    smoothness = 0.1,
+
+    state = "HIDDEN",
+    animT = 0,
+
+    originX = wW/2,
+    originY = wH/2,
+
+    
 
 }
 
