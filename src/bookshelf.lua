@@ -82,6 +82,8 @@ local item = {
 item.imgW = item.img:getWidth()
 item.imgH = item.img:getHeight()
 
+bookshelfImg = lg.newImage("assets/screens/bookshelf-books.png")
+
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
@@ -193,6 +195,8 @@ function BOOKSHELF:draw()
     drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
     lg.setColor(1, 0, 1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
+    drawImage(bookshelfImg, rS[1].x, rS[1].y, 1,1, rS[1].w, rS[1].h, rS[1].rot)
+
     lg.setColor(1, 1, 0)
     drawRectangle("fill", rS[2].x, rS[2].y, rS[2].w, rS[2].h, rS[2].w, rS[2].h, 0)
 
@@ -307,6 +311,14 @@ function drawRectangle(mode, x, y, width, height, ox, oy, angle)
     love.graphics.translate(x, y)
     love.graphics.rotate(math.rad(angle))
     love.graphics.rectangle(mode, -ox, -oy, width, height)
+    love.graphics.pop()
+end
+
+function drawImage(drawable, x, y, width, height, ox, oy, angle)
+    love.graphics.push()
+    love.graphics.translate(x, y)
+    love.graphics.rotate(math.rad(angle))
+    love.graphics.draw(drawable, x, y, angle, width, height, ox, oy)
     love.graphics.pop()
 end
 
