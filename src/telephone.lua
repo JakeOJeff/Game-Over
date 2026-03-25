@@ -44,7 +44,7 @@ function TELEPHONE:load()
         delay = 3,
         timer = 0,
         debounce = false
-        
+
     }
 
     self.display = "668231"
@@ -72,30 +72,31 @@ function TELEPHONE:load()
     end)
     btnZero = Button:new(694 * scale + 1 * enterTelButtNormal:getWidth() + 1 * 14 * scale, fourthY, telButtNormal,
         telButtPressed, "0", function()
-        if #self.display < 6 then
-            self.display = self.display .. tostring(0)
-        end
-    end)
+            if #self.display < 6 then
+                self.display = self.display .. tostring(0)
+            end
+        end)
     btnEnter = Button:new(694 * scale + 2 * enterTelButtNormal:getWidth() + 2 * 14 * scale, fourthY, enterTelButtNormal,
         enterTelButtPressed, ">", function()
             self:checkCode(self.display)
-    end)
+        end)
 end
 
 function TELEPHONE:update(dt)
-        folder:update(dt)
-        local sS = self.subtitles
+    folder:update(dt)
+    local sS = self.subtitles
 
     if sS.debounce then
-        if sS.index == #sS.text then sS.debounce = false end
+        if sS.index == #sS.text then
+            telnav.left = "BOOKSHELF"
+            sS.debounce = false
+        end
         sS.timer = sS.timer + 1 * dt
         if sS.timer >= sS.delay and sS.index < #sS.text then
             sS.index = sS.index + 1
             sS.timer = 0
 
             -- SHOW LEFT AREA AFTER CALL IS DONE
-                        telnav.left = "BOOKSHELF"
-
         end
     end
 
@@ -116,18 +117,17 @@ function TELEPHONE:draw()
     lg.print(self.display, 690 * scale, 170 * scale)
     lg.setColor(1, 1, 1)
     telnav:draw()
-        folder:drawBack()
+    folder:drawBack()
     folder:drawFront()
 
     lg.setFont(fontM)
     if self.subtitles.debounce then
         local subtitle = self.subtitles.text[self.subtitles.index]
-        lg.setColor(0,0,0)
-                lg.print(subtitle, wW/2 - fontM:getWidth(subtitle)/2, wH - fontM:getHeight() - 37 )
-        lg.setColor(1,1,1)
-        lg.print(subtitle, wW/2 - fontM:getWidth(subtitle)/2, wH - fontM:getHeight() - 40 )
+        lg.setColor(0, 0, 0)
+        lg.print(subtitle, wW / 2 - fontM:getWidth(subtitle) / 2, wH - fontM:getHeight() - 37)
+        lg.setColor(1, 1, 1)
+        lg.print(subtitle, wW / 2 - fontM:getWidth(subtitle) / 2, wH - fontM:getHeight() - 40)
     end
-
 end
 
 function TELEPHONE:mousepressed(x, y, button)
@@ -152,4 +152,5 @@ function TELEPHONE:call(name)
     self.subtitles.text = self.people[name]
     self.subtitles.debounce = true
 end
+
 return TELEPHONE
