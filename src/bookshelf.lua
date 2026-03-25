@@ -263,6 +263,10 @@ function BOOKSHELF:draw()
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
+    if item.state == "OPEN" and button == 1 then
+        item.state = "CLOSING"
+        return
+    end
     if hoverTarget.hovering and button == 1 then
         table.insert(clickCircles, {
             x = x,
