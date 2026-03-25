@@ -281,6 +281,13 @@ function BOOKSHELF:mousepressed(x, y, button)
             panelState = "PULLING"
             pointLines[1].x, pointLines[1].y = x, y
         end
+
+        if panelState == "PULLED" and text == "Inspect" then
+            item.originX = hoverTarget.x + hoverTarget.w / 2
+            item.originY = hoverTarget.y + hoverTarget.h / 2
+            item.state = "OPENING"
+            item.animT = 0
+        end
     end
 end
 
