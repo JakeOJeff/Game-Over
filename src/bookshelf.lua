@@ -318,10 +318,9 @@ function drawImage(drawable, x, y, width, height, ox, oy, angle)
     love.graphics.push()
     love.graphics.translate(x, y)
     love.graphics.rotate(math.rad(angle))
-    love.graphics.draw(drawable, x, y, angle, width, height, ox, oy)
+    love.graphics.draw(drawable, -ox, -oy, 0, width, height)  -- fixed
     love.graphics.pop()
 end
-
 function createFlatParticles(amt, life, x, y, width, dir)
     for i = 1, amt do
             table.insert(particles, {
