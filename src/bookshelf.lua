@@ -98,7 +98,22 @@ function BOOKSHELF:update(dt)
     if panelState == "PULLING" then
         pointLines[2].x, pointLines[2].y = mx, my
     end
-    calculateCurrentItemState()
+    if item.state == "OPENING" then
+        item.animT = math.min(1, item.animT + dt * 3)
+        if item.animT >= 1 then item.state = "OPEN" end
+    elseif item.state == "CLOSING" then
+        item.animT = math.max(0, item.animT - dt * 3)
+        if item.animT <= 0 then item.state = "HIDDEN" end
+    end
+
+    if item.state == "OPEN" or item.state == "OPENING" then
+        calculateCurrentItemState()
+    else
+        -- reset when hidden thingy
+        item.currentTiltX = item.currentTiltX * 0.85
+        item.currentTiltY = item.currentTiltY * 0.85
+        item.currentScale = item.currentScale + (1 - item.currentScale) * 0.1
+    end
     for i = #particles, 1, -1 do
         local v = particles[i]
             v.x = v.x + v.vx * dt
