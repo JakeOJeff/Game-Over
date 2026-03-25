@@ -193,12 +193,11 @@ function BOOKSHELF:draw()
     drawRectangle("line", panellingDef.x, panellingDef.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
 
     drawRectangle("fill", panelling.x, panelling.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
-    lg.setColor(1, 0, 1)
+    lg.setColor(1,1,1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
     drawImage(bookshelfImg, rS[1].x, rS[1].y, 1,1, rS[1].w, rS[1].h, rS[1].rot)
 
-    lg.setColor(1, 1, 0)
-    drawRectangle("fill", rS[2].x, rS[2].y, rS[2].w, rS[2].h, rS[2].w, rS[2].h, 0)
+    drawImage(bookshelfImg, rS[2].x, rS[2].y, 1,1, rS[2].w, rS[2].h, 0)
 
 
     for i, v in ipairs(particles) do
