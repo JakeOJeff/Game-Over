@@ -264,4 +264,28 @@ function createFlatParticles(amt, life, x, y, width, dir)
     end
 end
 
+function calculateCurrentItemState(currentTiltX, currentTiltY, currentScale)
+    
+
+    local mouseX = math.min(wW - 1, math.max(0, mx)) 
+    local mouseY = math.min(wH - 1, math.max(0, my))
+
+
+    local normX = (mouseX / wW) * 2 - 1
+    local normY = (mouseY / wH) * 2 - 1
+
+
+    local targetTiltX = -normY * item.maxTilt
+    local targetTiltY = normX * item.maxTilt
+
+    local dOC = math.sqrt(normX^2 + normY^2)
+    local targetScale = 1 + item.maxScale * ( 1 - dOC)
+
+
+    return currentTiltX + (targetTiltX - currentTiltX) * item.smoothness,
+    currentTiltY + (targetTiltY - currentTiltY) * item.smoothness,
+    currentScale + (targetScale - currentScale) * item.smoothness
+end
+end
+
 return BOOKSHELF
