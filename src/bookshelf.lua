@@ -182,8 +182,7 @@ function BOOKSHELF:update(dt)
     elseif energyBar.fill < energyBar.max then
         rectShelves[1].rot = rectRot - (rectRot / 3) * energyBar.fill / energyBar.max
     end
-
-    print(collectgarbage("collect"))
+    print(wH/1.5)
 end
 
 function BOOKSHELF:draw()
