@@ -277,16 +277,16 @@ function BOOKSHELF:mousepressed(x, y, button)
 
         energyBar.fill = math.min(energyBar.max, energyBar.fill + energyBar.rate)
 
-        if rectState == "FALLEN" then
-            panelState = "PULLING"
-            pointLines[1].x, pointLines[1].y = x, y
-        end
+
 
         if panelState == "PULLED" and text == "Inspect" then
             item.originX = hoverTarget.x + hoverTarget.w / 2
             item.originY = hoverTarget.y + hoverTarget.h / 2
             item.state = "OPENING"
             item.animT = 0
+        elseif rectState == "FALLEN" then
+            panelState = "PULLING"
+            pointLines[1].x, pointLines[1].y = x, y
         end
     end
 end
@@ -326,21 +326,17 @@ function createFlatParticles(amt, life, x, y, width, dir)
 end
 
 function calculateCurrentItemState()
-    
-    local mouseX = math.min(wW - 1, math.max(0, mx)) 
+    local mouseX = math.min(wW - 1, math.max(0, mx))
     local mouseY = math.min(wH - 1, math.max(0, my))
 
+    local normX = (mouseX / wW) * 2 - 1   -- -1..1, left to right
+    local normY = (mouseY / wH) * 2 - 1   -- -1..1, top to bottom
 
-    local normX = (mouseX / wW) * 2 - 1
-    local normY = (mouseY / wH) * 2 - 1
-
-
-    local targetTiltX = -normY * item.maxTilt
-    local targetTiltY = normX * item.maxTilt
+    local targetTiltX = normY * item.maxTilt    -- pitch: mouse down → tilt forward
+    local targetTiltY = -normX * item.maxTilt   -- yaw:  mouse right → tilt right
 
     local dOC = math.sqrt(normX^2 + normY^2)
-    local targetScale = 1 + item.maxScale * ( 1 - dOC)
-
+    local targetScale = 1 + item.maxScale * (1 - math.min(1, dOC))
 
     item.currentTiltX = item.currentTiltX + (targetTiltX - item.currentTiltX) * item.smoothness
     item.currentTiltY = item.currentTiltY + (targetTiltY - item.currentTiltY) * item.smoothness
