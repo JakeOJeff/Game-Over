@@ -55,6 +55,27 @@ local pointLines = {
 
 local particles = {}
 
+local item = {
+
+    x = wW/2,
+    y = wH/2,
+    img = lg.newImage("assets/screens/paper.png"),
+    
+    maxTilt = 0.3,
+    maxScale = 0.1,
+
+    currentTiltX = 0,
+    currentTiltY = 0,
+    currentScale = 1,
+    currentScaleX = 1,
+    currentScaleY = 1,
+    smoothness = 0.1,
+
+}
+
+item.imgW = item.img:getWidth()
+item.imgH = item.img:getHeight()
+
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
