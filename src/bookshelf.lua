@@ -232,23 +232,34 @@ function BOOKSHELF:draw()
         end
     end
 
-    -- item hover please change this later thank you <3
+    -- item viewer
 
-    local centerX = wW/2
-    local centerY = wH/2
-    lg.push()
+    if item.state ~= "HIDDEN" then
+        local t = item.animT
 
-    lg.translate(centerX, centerY)
+        local e = t < 0.5 and 4*t*t*t or 1 - (-2*t+2)^3/2
 
-    lg.rotate(item.currentTiltX)
-    lg.rotate(item.currentTiltY)
+        local cx = item.originX + (wW/2 - item.originX) * e
+        local cy = item.originY + (wH/2 - item.originY) * e
 
-    lg.scale(item.currentScale, item.currentScale)
 
-    lg.setColor(1,1,1)
-    lg.draw(item.img, -item.imgW/2, -item.imgH/2)
+        local targetS = math.min(wW * 0.7 / item.imgW, wH * 0.7 / item.imgH)
+        local s = (0.05 + (targetS - 0.05) * e) * item.currentScale
 
-    lg.pop()
+
+            -- dim background
+        lg.setColor(0, 0, 0, 0.6 * e)
+        lg.rectangle("fill", 0, 0, wW, wH)
+
+        lg.push()
+        lg.translate(cx, cy)
+        lg.rotate(item.currentTiltY)   -- yaw  (left/right mouse → rotate around Y)
+        lg.rotate(item.currentTiltX)   -- pitch (up/down mouse → rotate around X)
+        lg.scale(s, s)
+        lg.setColor(1, 1, 1)
+        lg.draw(item.img, -item.imgW/2, -item.imgH/2)
+        lg.pop()
+    end
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
