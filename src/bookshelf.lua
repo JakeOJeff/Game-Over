@@ -57,10 +57,10 @@ local particles = {}
 
 local item = {
 
-    x = wW/2,
-    y = wH/2,
+    x = wW / 2,
+    y = wH / 2,
     img = lg.newImage("assets/screens/paper.png"),
-    
+
     maxTilt = 0.3,
     maxScale = 0.1,
     smoothness = 0.1,
@@ -72,10 +72,10 @@ local item = {
     state = "HIDDEN",
     animT = 0,
 
-    originX = wW/2,
-    originY = wH/2,
+    originX = wW / 2,
+    originY = wH / 2,
 
-    
+
 
 }
 
@@ -85,6 +85,7 @@ item.imgH = item.img:getHeight()
 bookshelfImg = lg.newImage("assets/screens/bookshelf-books.png")
 panelBackImg = lg.newImage("assets/screens/panel-back.png")
 panelFrontImg = lg.newImage("assets/screens/panel.png")
+panelPulledFrontImg = lg.newImage("assets/screens/panel-pulled.png")
 bookshelfBg = lg.newImage("assets/screens/bookshelf-flat-bg.png")
 progressBarImg = lg.newImage("assets/screens/progress-bar.png")
 local mx, my = 0, 0
@@ -121,9 +122,9 @@ function BOOKSHELF:update(dt)
     end
     for i = #particles, 1, -1 do
         local v = particles[i]
-            v.x = v.x + v.vx * dt
-            v.y = v.y + v.vy * dt
-            v.life = v.life - dt
+        v.x = v.x + v.vx * dt
+        v.y = v.y + v.vy * dt
+        v.life = v.life - dt
 
         if v.life <= 0 then
             table.remove(particles, i)
@@ -161,7 +162,7 @@ function BOOKSHELF:update(dt)
             panelling.y = math.min(panellingDef.y + 300, panelling.y + (panelling.y / (panellingDef.y + 245)) * 600 * dt)
         else
             panelState = "PULLED"
-                        createFlatParticles(100, 3, panelling.x - panelling.w/2, panelling.y, panelling.w, -1)
+            createFlatParticles(100, 3, panelling.x - panelling.w / 2, panelling.y, panelling.w, -1)
         end
     end
 
@@ -187,29 +188,31 @@ function BOOKSHELF:update(dt)
     elseif energyBar.fill < energyBar.max then
         rectShelves[1].rot = rectRot - (rectRot / 3) * energyBar.fill / energyBar.max
     end
-    print(wH/1.5)
+    print(wH / 1.5)
 end
 
 function BOOKSHELF:draw()
     local rS = rectShelves
-    lg.setColor(1,1,1)
+    lg.setColor(1, 1, 1)
     lg.draw(bookshelfBg)
-    lg.setColor(1,1,1)
+    lg.setColor(1, 1, 1)
     -- drawRectangle("line", panellingDef.x, panellingDef.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
-    drawImage(panelBackImg, panellingDef.x, panellingDef.y, 1,1, panelling.w/2,panelling.h, 0)
-    drawImage(panelFrontImg, panelling.x, panelling.y, 1,1, panelling.w/2, panelling.h, 0)
+    drawImage(panelBackImg, panellingDef.x, panellingDef.y, 1, 1, panelling.w / 2, panelling.h, 0)
 
-    
-    lg.setColor(1,1,1)
+    local panelImg = (panelState == "STUCK" or panelState == "FAILED") and panelFrontImg or panelPulledFrontImg
+    drawImage(panelImg, panelling.x, panelling.y, 1, 1, panelling.w / 2, panelling.h, 0)
+
+
+    lg.setColor(1, 1, 1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
-    drawImage(bookshelfImg, rS[1].x, rS[1].y, 1,1, rS[1].w,  rS[1].h, rS[1].rot)
+    drawImage(bookshelfImg, rS[1].x, rS[1].y, 1, 1, rS[1].w, rS[1].h, rS[1].rot)
 
-    drawImage(bookshelfImg, rS[2].x, rS[2].y, 1,1, rS[2].w, rS[2].h, 0)
+    drawImage(bookshelfImg, rS[2].x, rS[2].y, 1, 1, rS[2].w, rS[2].h, 0)
 
 
     for i, v in ipairs(particles) do
-        lg.setColor(1, 1, 1, 0.5 * v.life/v.maxLife)
-        lg.circle("fill", v.x, v.y, 10 * (v.life/v.maxLife))
+        lg.setColor(1, 1, 1, 0.5 * v.life / v.maxLife)
+        lg.circle("fill", v.x, v.y, 10 * (v.life / v.maxLife))
     end
 
     lg.setColor(1, 1, 1)
@@ -220,12 +223,18 @@ function BOOKSHELF:draw()
     end
 
     if panelState == "PULLING" then
-        lg.setColor(1, 1, 1)
+        if pointLines[2].y - pointLines[1].y > 200 and math.abs(pointLines[2].x - pointLines[1].x) < 50 then
+            lg.setColor(0.27, 0.42, 0.18)
+        else
+            lg.setColor(1, 1, 1)
+        end
+        lg.setLineWidth(4)
         lg.circle("line", pointLines[1].x, pointLines[1].y, 2)
         lg.circle("line", pointLines[2].x, pointLines[2].y, 2)
         lg.line(pointLines[1].x, pointLines[1].y, pointLines[2].x, pointLines[2].y)
     end
 
+    lg.setColor(1, 1, 1)
 
     if hoverTarget.hovering then
         if rectState ~= "FALLING" then
@@ -239,9 +248,9 @@ function BOOKSHELF:draw()
             lg.rectangle("fill", mx - barW / 2 + 4, my + 20 + fontM:getHeight(), barW, 20)
             lg.setColor(0.43, 0.18, 0.24)
             lg.rectangle("fill", mx - barW / 2 + 4, my + 20 + fontM:getHeight(),
-                (barW * energyBar.fill / energyBar.max ), 20)
-                lg.setColor(1,1,1)
-            lg.draw(progressBarImg, mx-barW /2, my + 20 + fontM:getHeight())
+                (barW * energyBar.fill / energyBar.max), 20)
+            lg.setColor(1, 1, 1)
+            lg.draw(progressBarImg, mx - barW / 2, my + 20 + fontM:getHeight())
         end
     end
 
@@ -250,27 +259,27 @@ function BOOKSHELF:draw()
     if item.state ~= "HIDDEN" then
         local t = item.animT
 
-        local e = t < 0.5 and 4*t*t*t or 1 - (-2*t+2)^3/2
+        local e = t < 0.5 and 4 * t * t * t or 1 - (-2 * t + 2) ^ 3 / 2
 
-        local cx = item.originX + (wW/2 - item.originX) * e
-        local cy = item.originY + (wH/2 - item.originY) * e
+        local cx = item.originX + (wW / 2 - item.originX) * e
+        local cy = item.originY + (wH / 2 - item.originY) * e
 
 
         local targetS = math.min(wW * 0.7 / item.imgW, wH * 0.7 / item.imgH)
         local s = (0.05 + (targetS - 0.05) * e) * item.currentScale
 
 
-            -- dim background
+        -- dim background
         lg.setColor(0, 0, 0, 0.6 * e)
         lg.rectangle("fill", 0, 0, wW, wH)
 
         lg.push()
         lg.translate(cx, cy)
-        lg.rotate(item.currentTiltY)   -- yaw  (left/right mouse → rotate around Y)
-        lg.rotate(item.currentTiltX)   -- pitch (up/down mouse → rotate around X)
+        lg.rotate(item.currentTiltY) -- yaw  (left/right mouse → rotate around Y)
+        lg.rotate(item.currentTiltX) -- pitch (up/down mouse → rotate around X)
         lg.scale(s, s)
         lg.setColor(1, 1, 1)
-        lg.draw(item.img, -item.imgW/2, -item.imgH/2)
+        lg.draw(item.img, -item.imgW / 2, -item.imgH / 2)
         lg.pop()
     end
 end
@@ -308,7 +317,7 @@ function BOOKSHELF:mousereleased(x, y, button)
     if panelState == "PULLING" then
         if pointLines[2].y - pointLines[1].y > 200 and math.abs(pointLines[2].x - pointLines[1].x) < 50 then
             panelState = "MOVING"
-            
+
             text = "Inspect"
         else
             panelState = "FAILED"
@@ -328,20 +337,21 @@ function drawImage(drawable, x, y, width, height, ox, oy, angle)
     love.graphics.push()
     love.graphics.translate(x, y)
     love.graphics.rotate(math.rad(angle))
-    love.graphics.draw(drawable, -ox, -oy, 0, width, height)  -- fixed
+    love.graphics.draw(drawable, -ox, -oy, 0, width, height) -- fixed
     love.graphics.pop()
 end
+
 function createFlatParticles(amt, life, x, y, width, dir)
     for i = 1, amt do
-            table.insert(particles, {
-                x = love.math.random(x, x + width),
-                y = y + love.math.random(-10, 5),
-                dir = dir,
-                life = life,
-                maxLife = life,
-                vx = love.math.random(-10, 10),
-                vy = love.math.random(-24, -10)
-            })
+        table.insert(particles, {
+            x = love.math.random(x, x + width),
+            y = y + love.math.random(-10, 5),
+            dir = dir,
+            life = life,
+            maxLife = life,
+            vx = love.math.random(-10, 10),
+            vy = love.math.random(-24, -10)
+        })
     end
 end
 
@@ -349,13 +359,13 @@ function calculateCurrentItemState()
     local mouseX = math.min(wW - 1, math.max(0, mx))
     local mouseY = math.min(wH - 1, math.max(0, my))
 
-    local normX = (mouseX / wW) * 2 - 1   -- -1..1, left to right
-    local normY = (mouseY / wH) * 2 - 1   -- -1..1, top to bottom
+    local normX = (mouseX / wW) * 2 - 1       -- -1..1, left to right
+    local normY = (mouseY / wH) * 2 - 1       -- -1..1, top to bottom
 
-    local targetTiltX = normY * item.maxTilt    -- pitch: mouse down → tilt forward
-    local targetTiltY = -normX * item.maxTilt   -- yaw:  mouse right → tilt right
+    local targetTiltX = normY * item.maxTilt  -- pitch: mouse down → tilt forward
+    local targetTiltY = -normX * item.maxTilt -- yaw:  mouse right → tilt right
 
-    local dOC = math.sqrt(normX^2 + normY^2)
+    local dOC = math.sqrt(normX ^ 2 + normY ^ 2)
     local targetScale = 1 + item.maxScale * (1 - math.min(1, dOC))
 
     item.currentTiltX = item.currentTiltX + (targetTiltX - item.currentTiltX) * item.smoothness
