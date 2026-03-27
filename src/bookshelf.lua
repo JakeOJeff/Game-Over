@@ -86,6 +86,7 @@ bookshelfImg = lg.newImage("assets/screens/bookshelf-books.png")
 panelBackImg = lg.newImage("assets/screens/panel-back.png")
 panelFrontImg = lg.newImage("assets/screens/panel.png")
 bookshelfBg = lg.newImage("assets/screens/bookshelf-bg.png")
+progressBarImg = lg.newImage("assets/screens/progress-bar.png")
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
@@ -233,10 +234,14 @@ function BOOKSHELF:draw()
         end
 
         if rectState == "STUCK" then
-            lg.rectangle("fill", mx - fontM:getWidth(text) / 2, my + 20 + fontM:getHeight(), fontM:getWidth(text), 20)
-            lg.setColor(0, 0, 1)
-            lg.rectangle("fill", mx - fontM:getWidth(text) / 2, my + 20 + fontM:getHeight(),
-                fontM:getWidth(text) * energyBar.fill / energyBar.max, 20)
+            local barW = 200 - 8
+            lg.setColor(0.85, 0.75, 0.70)
+            lg.rectangle("fill", mx - barW / 2 + 4, my + 20 + fontM:getHeight(), barW, 20)
+            lg.setColor(0.43, 0.18, 0.24)
+            lg.rectangle("fill", mx - barW / 2 + 4, my + 20 + fontM:getHeight(),
+                (barW * energyBar.fill / energyBar.max ), 20)
+                lg.setColor(1,1,1)
+            lg.draw(progressBarImg, mx-barW /2, my + 20 + fontM:getHeight())
         end
     end
 
