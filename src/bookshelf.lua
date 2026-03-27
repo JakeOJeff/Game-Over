@@ -85,7 +85,7 @@ item.imgH = item.img:getHeight()
 bookshelfImg = lg.newImage("assets/screens/bookshelf-books.png")
 panelBackImg = lg.newImage("assets/screens/panel-back.png")
 panelFrontImg = lg.newImage("assets/screens/panel.png")
-bookshelfBg = lg.newImage("assets/screens/bookshelf-bg.png")
+bookshelfBg = lg.newImage("assets/screens/bookshelf-flat-bg.png")
 progressBarImg = lg.newImage("assets/screens/progress-bar.png")
 local mx, my = 0, 0
 function BOOKSHELF:load()
