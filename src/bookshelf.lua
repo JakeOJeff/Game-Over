@@ -85,7 +85,7 @@ item.imgH = item.img:getHeight()
 bookshelfImg = lg.newImage("assets/screens/bookshelf-books.png")
 panelBackImg = lg.newImage("assets/screens/panel-back.png")
 panelFrontImg = lg.newImage("assets/screens/panel.png")
-
+bookshelfBg = lg.newImage("assets/screens/bookshelf-bg.png")
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
@@ -192,6 +192,8 @@ end
 function BOOKSHELF:draw()
     local rS = rectShelves
     lg.setColor(1,1,1)
+    lg.draw(bookshelfBg)
+    lg.setColor(1,1,1)
     -- drawRectangle("line", panellingDef.x, panellingDef.y, panelling.w, panelling.h, panelling.w / 2, panelling.h, 0)
     drawImage(panelBackImg, panellingDef.x, panellingDef.y, 1,1, panelling.w/2,panelling.h, 0)
     drawImage(panelFrontImg, panelling.x, panelling.y, 1,1, panelling.w/2, panelling.h, 0)
@@ -199,7 +201,7 @@ function BOOKSHELF:draw()
     
     lg.setColor(1,1,1)
     drawRectangle("fill", rS[1].x, rS[1].y, rS[1].w, rS[1].h, rS[1].w, rS[1].h, rS[1].rot)
-    drawImage(bookshelfImg, rS[1].x, rS[1].y, 1,1, rS[1].w, rS[1].h, rS[1].rot)
+    drawImage(bookshelfImg, rS[1].x, rS[1].y, 1,1, rS[1].w,  rS[1].h, rS[1].rot)
 
     drawImage(bookshelfImg, rS[2].x, rS[2].y, 1,1, rS[2].w, rS[2].h, 0)
 
