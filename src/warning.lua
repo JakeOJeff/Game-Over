@@ -1,4 +1,4 @@
-local warning = {}
+local WARNING = {}
 
 local cur_time = os.date("*t")
 local greetingText = ""
@@ -19,7 +19,7 @@ end
 
 
 
-function warning:load()
+function WARNING:load()
     textSet = {
         greetingText,
         " I have to warn you a few things.",
@@ -36,26 +36,29 @@ function warning:load()
     }
     finalString = ""
     index = 1
-    textIndex = 1
-    maxTypingRate = 0.5
+    textIndex = 0
+    maxTypingRate = 0.05
     typingRate = maxTypingRate
     maxTimer = 3
     timer = maxTimer
 end
 
-function warning:update(dt)
-    if textIndex < #textSet[index] then
+function WARNING:update(dt)
+    if textIndex <= #textSet[index] then
         typingRate = typingRate - 1 * dt
         if typingRate <= 0 then
             typingRate = maxTypingRate
             textIndex = textIndex + 1
             finalString = finalString .. string.sub(textSet[index], textIndex, textIndex)
         end
+    else
+        textIndex = 0
+        index = index + 1
     end
 end
 
-function warning:draw()
-    
+function WARNING:draw()
+    lg.print(finalString)
 end
 
-return warning
+return WARNING
