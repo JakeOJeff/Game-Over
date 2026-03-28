@@ -45,21 +45,21 @@ function WARNING:load()
     finalString = ""
     index = 1
     textIndex = 0
-    maxTypingRate = 0.05
+    maxTypingRate = 0.005
     typingRate = maxTypingRate
-    maxTimer = 1
+    maxTimer = 0.2
     timer = maxTimer
 end
 
 function WARNING:update(dt)
-    if textIndex <= #textSet[index] then
+    if textSet[index] and textIndex <= #textSet[index] then
         typingRate = typingRate - 1 * dt
         if typingRate <= 0 then
             typingRate = maxTypingRate
             textIndex = textIndex + 1
             finalString = finalString .. string.sub(textSet[index], textIndex, textIndex)
         end
-    else
+    elseif index <= #textSet then
         if timer <= 0 then
             textIndex = 0
             index = index + 1
@@ -71,7 +71,9 @@ function WARNING:update(dt)
 end
 
 function WARNING:keypressed(key)
-    
+    if key == "space" then
+        WARNING.setScene("END")
+    end
 end
 
 function WARNING:draw()
