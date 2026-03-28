@@ -4,11 +4,12 @@ local cur_time = os.date("*t")
 local greetingText = ""
 
 if cur_time.hour <= 4 then
-    greetingText = "A concious time to be awake at ".. cur_time.hour .. "."
+    greetingText = "A concious time to be awake at " .. cur_time.hour .. "."
 elseif cur_time.hour <= 7 then
     greetingText = "Early Riser aren't you, or didn't you sleep?"
 elseif cur_time.hour <= 12 then
-    greetingText = "Good morning, I didn't expect much of you anyway considering you are playing when the sun is still out."
+    greetingText =
+    "Good morning, I didn't expect much of you anyway considering you are playing when the sun is still out."
 elseif cur_time.hour <= 16 then
     greetingText = "What a relaxing afternoon that we have here!"
 elseif cur_time.hour <= 21 then
@@ -26,20 +27,27 @@ function WARNING:load()
         " Don't worry, its just procedure, nothing too much and too less.",
         " I'm not here to make you sign a ToS, heck even I don't read it!",
         " I just have to let you know that elements in the game may be disturbing for some users.",
-        " Rated PG-13 but recommended for Mature Audiences.",
+        " Rated PG-13 (13+) and contains psychological elements and indications of violence but recommended for Mature Audiences.",
+        " A personality will be played for the following statements but I hope you realize that it's part of the character building.",
         " Elements may not be as disturbing as I'm letting you in on, but like I said, procedure.",
+        " You should also realize, that this is an experience.",
+        " Do not have abnormal expectations for a rotted mind.",
+        " Such thoughts shall not be deemed redeemable, and may let people into more unease.",
+        " Just make sure it's fun for you and everyone involved.",
+        " Do NOT, and I mean DO NOT spiral this into a mess.",
         " If you need anything,",
         " just let me know,",
-        " I'll make sure to ignore you",
+        " I'll make sure to ignore you.",
         " Thank you!",
-        " :)"
+        " :)",
+        "             Press 'SPACE' when you're ready."
     }
     finalString = ""
     index = 1
     textIndex = 0
     maxTypingRate = 0.05
     typingRate = maxTypingRate
-    maxTimer = 3
+    maxTimer = 1
     timer = maxTimer
 end
 
@@ -52,13 +60,23 @@ function WARNING:update(dt)
             finalString = finalString .. string.sub(textSet[index], textIndex, textIndex)
         end
     else
-        textIndex = 0
-        index = index + 1
+        if timer <= 0 then
+            textIndex = 0
+            index = index + 1
+            timer = maxTimer
+        else
+            timer = timer - 1 * dt
+        end
     end
 end
 
+function WARNING:keypressed(key)
+    
+end
+
 function WARNING:draw()
-    lg.print(finalString)
+    lg.setFont(fontM)
+    lg.printf(finalString, 10, 10, wW - 20, "left")
 end
 
 return WARNING
