@@ -11,7 +11,7 @@ elseif cur_time.hour <= 7 then
     greetingText = "Early Riser aren't you, or didn't you sleep?"
 elseif cur_time.hour <= 12 then
     greetingText =
-    "Good morning, I didn't expect much of you anyway considering you are playing when the sun is still out."
+    "Good morning. Playing when the sun is still out huh?"
 elseif cur_time.hour <= 16 then
     greetingText = "What a relaxing afternoon that we have here!"
 elseif cur_time.hour <= 21 then
@@ -49,7 +49,7 @@ function WARNING:load()
     textIndex = 0
     maxTypingRate = 0.005
     typingRate = maxTypingRate
-    maxTimer = 0.1
+    maxTimer = 1
     timer = maxTimer
 end
 

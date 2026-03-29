@@ -59,7 +59,7 @@ local item = {
 
     x = wW / 2,
     y = wH / 2,
-    img = lg.newImage("assets/screens/paper.png"),
+    img = lg.newImage("assets/screens/voss-note-1.png"),
 
     maxTilt = 0.3,
     maxScale = 0.1,
