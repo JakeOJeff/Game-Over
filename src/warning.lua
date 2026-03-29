@@ -3,6 +3,8 @@ local WARNING = {}
 local cur_time = os.date("*t")
 local greetingText = ""
 
+local typingAudio = love.audio.newSource("assets/audio/typing.mp3", "stream")
+
 if cur_time.hour <= 4 then
     greetingText = "A concious time to be awake at " .. cur_time.hour .. "."
 elseif cur_time.hour <= 7 then
@@ -33,7 +35,6 @@ function WARNING:load()
         " You should also realize, that THIS is an experience.",
         " Do not have abnormal expectations for a rotted mind.",
         " No one stays with childlike INNOCENCE for so long!",
-        " Do not try to spiral this into a mess.",
         " Such thoughts SHALL NOT BE DEEMED REDEEMABLE, and may let people into more unease.",
         " Just make sure it's fun FOR YOU and everyone involved.",
         " If you need anything,",
@@ -48,25 +49,34 @@ function WARNING:load()
     textIndex = 0
     maxTypingRate = 0.005
     typingRate = maxTypingRate
-    maxTimer = 0.2
+    maxTimer = 0.1
     timer = maxTimer
 end
 
 function WARNING:update(dt)
     if textSet[index] and textIndex <= #textSet[index] then
+        if not typingAudio:isPlaying() then
+            typingAudio:play()
+        end
         typingRate = typingRate - 1 * dt
         if typingRate <= 0 then
             typingRate = maxTypingRate
             textIndex = textIndex + 1
             finalString = finalString .. string.sub(textSet[index], textIndex, textIndex)
         end
-    elseif index <= #textSet then
+    elseif index < #textSet then
         if timer <= 0 then
             textIndex = 0
             index = index + 1
             timer = maxTimer
+            typingAudio:play()
         else
+            typingAudio:stop()
             timer = timer - 1 * dt
+        end
+    else
+        if typingAudio:isPlaying() then
+            typingAudio:stop()
         end
     end
 end
