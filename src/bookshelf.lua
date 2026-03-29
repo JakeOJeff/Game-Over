@@ -88,6 +88,9 @@ panelFrontImg = lg.newImage("assets/screens/panel.png")
 panelPulledFrontImg = lg.newImage("assets/screens/panel-pulled.png")
 bookshelfBg = lg.newImage("assets/screens/bookshelf-flat-bg.png")
 progressBarImg = lg.newImage("assets/screens/progress-bar.png")
+
+shelfThud = love.audio.newSource("assets/audio/shelf-thud.mp3", "static")
+metallicThud = love.audio.newSource("assets/audio/metal-thud.mp3", "static")
 local mx, my = 0, 0
 function BOOKSHELF:load()
     energyBar = {
@@ -162,6 +165,7 @@ function BOOKSHELF:update(dt)
             panelling.y = math.min(panellingDef.y + 300, panelling.y + (panelling.y / (panellingDef.y + 245)) * 600 * dt)
         else
             panelState = "PULLED"
+            metallicThud:play()
             createFlatParticles(100, 3, panelling.x - panelling.w / 2, panelling.y, panelling.w, -1)
         end
     end
@@ -173,7 +177,7 @@ function BOOKSHELF:update(dt)
         rectShelves[1].rot = math.max(0, rectShelves[1].rot - 10 * ((rectRot / 3 / rectShelves[1].rot)) * dt)
         if rectShelves[1].rot <= 0 then
             rectState = "FALLEN"
-
+            shelfThud:play()
             createFlatParticles(200, 6, rectShelves[1].x - rectShelves[1].w, rectShelves[1].y, rectShelves[1].w, -1)
 
             hoverTarget = {
@@ -233,6 +237,7 @@ function BOOKSHELF:draw()
         lg.circle("line", pointLines[2].x, pointLines[2].y, 2)
         lg.line(pointLines[1].x, pointLines[1].y, pointLines[2].x, pointLines[2].y)
     end
+
 
     lg.setColor(1, 1, 1)
 
