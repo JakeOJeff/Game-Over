@@ -313,6 +313,7 @@ function BOOKSHELF:mousepressed(x, y, button)
 
 
         if panelState == "PULLED" and text == "Inspect" then
+                        booknav.left = "OVERVIEW"
             item.originX = hoverTarget.x + hoverTarget.w / 2
             item.originY = hoverTarget.y + hoverTarget.h / 2
             item.state = "OPENING"

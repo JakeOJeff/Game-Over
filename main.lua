@@ -35,11 +35,11 @@ Note:load()
 
 local scenery = SceneryInit(
     { path = "src.warning", key = "WARNING"},
-    { path = "src.end", key = "END", default = true},
+    { path = "src.end", key = "END"},
     { path = "src.transition", key = "TRANSITION" },
     { path = "src.reality", key = "REALITY"},
     { path = "src.telephone", key = "TELEPHONE" },
-    { path = "src.bookshelf", key = "BOOKSHELF"},
+    { path = "src.bookshelf", key = "BOOKSHELF", default = true},
     { path = "src.overview", key = "OVERVIEW"}
 
 )
