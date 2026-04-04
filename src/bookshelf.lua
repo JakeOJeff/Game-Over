@@ -93,6 +93,8 @@ shelfThud = love.audio.newSource("assets/audio/shelf-thud.mp3", "static")
 metallicThud = love.audio.newSource("assets/audio/metal-thud.mp3", "static")
 local mx, my = 0, 0
 function BOOKSHELF:load()
+        booknav = nav:new(self, nil)
+
     energyBar = {
         max = 20,
         fill = 0,
@@ -287,9 +289,13 @@ function BOOKSHELF:draw()
         lg.draw(item.img, -item.imgW / 2, -item.imgH / 2)
         lg.pop()
     end
+        booknav:draw()
+
 end
 
 function BOOKSHELF:mousepressed(x, y, button)
+            booknav:mousepressed(x, y, button)
+
     if item.state == "OPEN" and button == 1 then
         item.state = "CLOSING"
         return
