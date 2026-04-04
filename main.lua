@@ -20,6 +20,8 @@ wH = love.graphics.getHeight()
 scale = math.max(wW / baseWidth, wH / baseHeight)
 
 fontSS = love.graphics.newFont("assets/fonts/nihonium.otf", 20 * scale)
+fontS = love.graphics.newFont("assets/fonts/nihonium.otf", 35 * scale)
+
 fontM = love.graphics.newFont("assets/fonts/nihonium.otf", 50 * scale)
 fontH = love.graphics.newFont("assets/fonts/nihonium.otf", 150 * scale)
 fontHH = love.graphics.newFont("assets/fonts/nihonium.otf", 200 * scale)
@@ -39,8 +41,8 @@ local scenery = SceneryInit(
     { path = "src.transition", key = "TRANSITION" },
     { path = "src.reality", key = "REALITY"},
     { path = "src.telephone", key = "TELEPHONE" },
-    { path = "src.bookshelf", key = "BOOKSHELF", default = true},
-    { path = "src.overview", key = "OVERVIEW"}
+    { path = "src.bookshelf", key = "BOOKSHELF"},
+    { path = "src.overview", key = "OVERVIEW", default = true}
 
 )
 -- NOTES
