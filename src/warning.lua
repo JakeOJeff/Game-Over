@@ -15,9 +15,9 @@ elseif cur_time.hour <= 12 then
 elseif cur_time.hour <= 16 then
     greetingText = "What a relaxing afternoon that we have here!"
 elseif cur_time.hour <= 21 then
-    greetingText = "A long day with responsibilities, work, pressure and rising tension. Welcome!"
+    greetingText = "A long day with responsibilities, work, pressure and rising tension."
 elseif cur_time.hour <= 23 then
-    greetingText = "Ahh, what a way to end the day! Hail Hail!"
+    greetingText = "Ahh, what a way to end the day, Hail Hail!"
 end
 
 
@@ -42,12 +42,12 @@ function WARNING:load()
         " I'll make sure to ignore you.",
         " Thank you!",
         " :)",
-        "             Press 'SPACE' when you're ready."
+        " Press 'SPACE' when you're ready"
     }
     finalString = ""
     index = 1
     textIndex = 0
-    maxTypingRate = 0.005
+    maxTypingRate = 0.05
     typingRate = maxTypingRate
     maxTimer = 1
     timer = maxTimer

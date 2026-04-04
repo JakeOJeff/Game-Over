@@ -34,8 +34,8 @@ Note:load()
 
 
 local scenery = SceneryInit(
-    { path = "src.warning", key = "WARNING", default = true},
-    { path = "src.end", key = "END"},
+    { path = "src.warning", key = "WARNING"},
+    { path = "src.end", key = "END", default = true},
     { path = "src.transition", key = "TRANSITION" },
     { path = "src.reality", key = "REALITY"},
     { path = "src.telephone", key = "TELEPHONE" },

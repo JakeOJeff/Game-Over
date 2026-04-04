@@ -39,7 +39,8 @@ function END:load()
 		"Voice Acting : CAST OF THOUSANDS",
 		"QA Lead : ANITA ROLL",
 		"Testers : YOU, THE PLAYER",
-		"Special Thanks : COFFEE",
+		"Special Thanks : COFFEE, julia-locks-in",
+		"Lovelies: AJ, Julia, Ofknee, Shelley, Owais, Logan, Adishree",
 		"Special Thanks : CATS OF THE INTERNET",
 		"Made With Love2D <3",
 	}
