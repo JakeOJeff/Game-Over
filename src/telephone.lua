@@ -28,8 +28,8 @@ function TELEPHONE:load()
 
     self.people = {
         ["Janitor"] = {
-            "",
-            "",
+            "*Ringing*",
+            "*Ringing*",
             "Hello?",
             "Jack?",
             "I have done what you asked",
@@ -47,7 +47,7 @@ function TELEPHONE:load()
 
     }
 
-    self.display = "668231"
+    self.display = ""
 
 
     local no = 0
